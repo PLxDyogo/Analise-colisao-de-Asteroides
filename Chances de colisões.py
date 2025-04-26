@@ -1,10 +1,20 @@
-#aqui é para importar a biblioteca json para salvar e carregar os dados dos asteroides
-import json    
+# Aqui é para importar a biblioteca json para salvar e carregar os dados dos asteroides e a math para fazer os calculos
+import json
+import math
 
-#lista vazia que vai armazenar os asteroides
+# Lista vazia que vai armazenar os asteroides
 asteroides = []
 
-#Função para carregar os asteroides já armazenados no arquivo JSON 
+# Função para calcular a massa do asteroide a partir do diâmetro (em metros)
+def calcular_massa(diametro_metros):
+    raio = diametro_metros / 2
+    volume = (4/3) * math.pi * (raio ** 3)
+    densidade = 2500  # kg/m³ (densidade média de asteroides rochosos)
+    massa_kg = volume * densidade
+    massa_toneladas = massa_kg / 1000
+    return massa_toneladas
+
+# Função para carregar os asteroides já armazenados no arquivo JSON
 def asteroides_armazenados():
     global asteroides
     try:
@@ -15,53 +25,58 @@ def asteroides_armazenados():
         asteroides = []
         print("Nenhum arquivo encontrado. Iniciando com lista vazia.")
 
-#função para salvar os asteroides no arquivo JSON
+# Função para salvar os asteroides no arquivo JSON
 def salvar_asteroides():
     with open("asteroides.json", "w", encoding="utf-8") as arquivo:
         json.dump(asteroides, arquivo, indent=4)
     print("Asteroides salvos com sucesso!")
 
-#Função para adicionar um novo asteroide
+# Função para adicionar um novo asteroide
 def adicionar_asteroide():
-    #aqui vou adicionar os dados do asteroides
+    # Aqui vou adicionar os dados do asteroide
     nome = input("\nNome do asteroide: ")
-    massa = float(input("\nMassa do asteroide (em toneladas): "))
-    velocidade = float(input("\nVelocidade do asteroide (em km/h): ")) 
+    diametro = float(input("\nDiâmetro do asteroide (em metros): "))
+    velocidade_kms = float(input("\nVelocidade do asteroide (em km/s): "))
     distancia = float(input("\nDistância mínima da Terra (em milhões de km): "))
 
-    #dicionário que representa o asteroide
+    # Calculando a massa automaticamente
+    massa = calcular_massa(diametro)
+    # Convertendo a velocidade de km/s para km/h
+    velocidade = velocidade_kms * 3600
+
+    # Dicionário que representa o asteroide
     asteroide = {
         "nome": nome,
         "massa": massa,
         "velocidade": velocidade,
         "distancia": distancia
-    }  
+    }
 
-    #adicionando o asteroide à lista
+    # Adicionando o asteroide à lista
     asteroides.append(asteroide)
     print(f"{nome} adicionado com sucesso!\n")
 
-    #aqui vai salvar automaticamente após adicionar
+    # Salvando automaticamente após adicionar
     salvar_asteroides()
 
-#Função para listar todos os asteroides cadastrados
+# Função para listar todos os asteroides cadastrados
 def listar_asteroides():
     if not asteroides:
         print("Nenhum asteroide cadastrado.")
         return
 
-    #Mostrando cada asteroide com seu número
+    # Mostrando cada asteroide com seu número
     for i, ast in enumerate(asteroides, start=1):
-        print(f"{i}. {ast['nome']} - Massa: {ast['massa']} t, Velocidade: {ast['velocidade']} km/h, Distância: {ast['distancia']} mi km")
+        print(f"{i}. {ast['nome']} - Massa: {ast['massa']:.2f} t, Velocidade: {ast['velocidade']:.2f} km/h, Distância: {ast['distancia']} mi km")
 
-#Função para calcular a probabilidade de colisão de forma simples
+# Função para calcular a probabilidade de colisão de forma simples
 def calcular_probabilidade(massa, velocidade, distancia):
     risco_colisao = (massa * velocidade) / (distancia ** 2)
     risco_maximo = 2.4e15  # Constante baseada em um cenário de risco extremo
     probabilidade = min(risco_colisao / risco_maximo, 1.0)
     return probabilidade
 
-#Função para verificar o risco de colisão de cada asteroide
+# Função para verificar o risco de colisão de cada asteroide
 def verificar_colisoes():
     if not asteroides:
         print("Nenhum asteroide registrado.")
@@ -72,8 +87,8 @@ def verificar_colisoes():
         prob = calcular_probabilidade(ast["massa"], ast["velocidade"], ast["distancia"])
         risco_colisao = prob * 100
 
-        #Classificando o risco
-        if risco_colisao>= 80:
+        # Classificando o risco
+        if risco_colisao >= 80:
             nivel = "RISCO ALTO!"
         elif risco_colisao >= 50:
             nivel = "RISCO MODERADO"
@@ -82,7 +97,7 @@ def verificar_colisoes():
 
         print(f"{ast['nome']}: {risco_colisao:.6f}% chance de colisão ({nivel})")
 
-#menu interativo para o usuário
+# Menu interativo para o usuário
 def menu():
     while True:
         print("\n=== MENU ===")
@@ -101,12 +116,13 @@ def menu():
             verificar_colisoes()
         elif opcao == "4":
             salvar_asteroides()
-            print("Saindo do programa... Até a próxima!")
+            print("Saindo do programa...")
             break
         else:
             print("Opção inválida. Tente novamente.")
 
-#Quando o programa começar, ele vai tentar carregar os asteroides existentes
+# Quando o programa começar, ele vai tentar carregar os asteroides existentes
 asteroides_armazenados()
-#Depois chama o menu para o usuário interagir
+
+# Depois chama o menu para o usuário interagir
 menu()
