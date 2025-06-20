@@ -18,7 +18,6 @@ Este é um projeto da minha faculdade desenvolvido para a disciplina de Estrutur
     ```
 
 2.  **Instale as Dependências:**
-    (É recomendado criar um ambiente virtual primeiro)
     ```bash
     pip install -r requirements.txt
     ```
