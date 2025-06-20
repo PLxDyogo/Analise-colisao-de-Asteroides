@@ -2,14 +2,14 @@
 
 Este é um projeto da minha faculdade desenvolvido para a disciplina de Estrutura de Dados. O sistema em Python gerencia e analisa o risco de colisão de asteroides, utilizando dados reais da API da NASA e uma estrutura de dados customizada.
 
-## 🚀 Funcionalidades Principais
+## Funcionalidades Principais
 
 * **Estrutura de Dados Customizada:** Utiliza uma Lista Encadeada Ordenada, implementada do zero, para gerenciar os asteroides e mantê-los sempre organizados por nível de risco.
 * **Integração com API Real:** Conecta-se à API NeoWs (Near-Earth Object Web Service) da NASA para buscar dados atualizados de asteroides próximos à Terra.
 * **Análise de Risco Avançada:** Implementa um modelo simplificado inspirado na Escala de Turim, que classifica o perigo de cada objeto com base na probabilidade de colisão e na energia cinética do impacto.
 * **Persistência de Dados:** Salva e carrega a lista de asteroides em um arquivo JSON, mantendo os dados entre as execuções do programa.
 
-## ⚙️ Como Executar o Programa
+## Como Executar o Programa
 
 1.  **Clone o Repositório:**
     ```bash
